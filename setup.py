@@ -205,7 +205,10 @@ def settings_from_prefix(prefix=None, bundle_libzmq_dylib=False):
     settings['extra_link_args'] = [] 
     
     if sys.platform.startswith('win'):
-        settings['libraries'].append(libzmq_name)
+        libzmq_lib = libzmq_name
+        if libzmq_lib.startswith('lib'):
+            libzmq_lib = libzmq_lib[3:]
+        settings['libraries'].append(libzmq_lib)
         
         if prefix:
             settings['include_dirs'] += [pjoin(prefix, 'include')]
