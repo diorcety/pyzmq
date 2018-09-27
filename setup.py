@@ -379,20 +379,6 @@ class Configure(build_ext):
     def create_tempdir(self):
         self.erase_tempdir()
         os.makedirs(self.tempdir)
-        if sys.platform.startswith('win'):
-            # fetch libzmq.dll into local dir
-            local_dll = pjoin(self.tempdir, libzmq_name + '.dll')
-            if not self.config['zmq_prefix'] and not os.path.exists(local_dll):
-                fatal("ZMQ directory must be specified on Windows via setup.cfg"
-                " or 'python setup.py configure --zmq=/path/to/zeromq2'")
-            
-            try:
-                shutil.copy(pjoin(self.config['zmq_prefix'], 'lib', libzmq_name + '.dll'), local_dll)
-            except Exception:
-                if not os.path.exists(local_dll):
-                    warn("Could not copy " + libzmq_name + " into zmq/, which is usually necessary on Windows."
-                    "Please specify zmq prefix via configure --zmq=/path/to/zmq or copy "
-                    + libzmq_name + " into zmq/ manually.")
 
     def erase_tempdir(self):
         try:
@@ -471,19 +457,6 @@ class Configure(build_ext):
             warn("Detected ZMQ version: %s. Some new features in libzmq may not be exposed by pyzmq." % vs)
             line()
 
-        if sys.platform.startswith('win'):
-            # fetch libzmq.dll into local dir
-            local_dll = localpath('zmq', libzmq_name + '.dll')
-            if not zmq_prefix and not os.path.exists(local_dll):
-                fatal("ZMQ directory must be specified on Windows via setup.cfg or 'python setup.py configure --zmq=/path/to/zeromq2'")
-            try:
-                shutil.copy(pjoin(zmq_prefix, 'lib', libzmq_name + '.dll'), local_dll)
-            except Exception:
-                if not os.path.exists(local_dll):
-                    warn("Could not copy " + libzmq_name + " into zmq/, which is usually necessary on Windows."
-                    "Please specify zmq prefix via configure --zmq=/path/to/zmq or copy "
-                    + libzmq_name + " into zmq/ manually.")
-    
     def bundle_libzmq_extension(self):
         bundledir = "bundled"
         ext_modules = self.distribution.ext_modules
