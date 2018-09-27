@@ -314,17 +314,6 @@ class Configure(build_ext):
         """set up compiler settings, based on config"""
         cfg = self.config
 
-        if sys.platform == 'win32' and cfg.get('bundle_msvcp') is None:
-            # default bundle_msvcp=True on:
-            # Windows Python 3.5 bdist *without* DISTUTILS_USE_SDK
-            if os.environ.get("PYZMQ_BUNDLE_CRT") or (
-                sys.version_info >= (3,5)
-                and self.compiler_type == 'msvc'
-                and not os.environ.get('DISTUTILS_USE_SDK')
-                and doing_bdist
-            ):
-                cfg['bundle_msvcp'] = True
-
         if cfg['libzmq_extension']:
             settings = bundled_settings(self.debug)
         else:
