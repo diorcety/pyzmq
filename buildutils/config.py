@@ -162,5 +162,6 @@ def discover_settings(conf_base=None):
         merge(settings, load_config('config', conf_base))
     merge(settings, get_cfg_args())
     merge(settings, get_env_args())
+    merge(settings, config_from_prefix(settings['zmq_prefix']))
     
     return settings
